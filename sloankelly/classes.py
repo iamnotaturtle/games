@@ -11,7 +11,7 @@ class Ball:
         self.served = False
 
     def hasHitBrick(self, bricks):
-        return self.img.get_rect().collidelist(bricks)
+        return self.rect.collidelist(bricks)
 
     def hasHitBat(self, bat):
         return self.rect.colliderect(bat)
@@ -19,7 +19,7 @@ class Ball:
     def draw(self, surface): 
         surface.blit(self.img, (self.x, self. y))
     
-    def update(self, gameTime, bat, playerY):
+    def update(self, bat, playerY):
         if not self.served:
             return
 
@@ -45,7 +45,22 @@ class Ball:
             self.x, self.y = self.initX, self.initY
             (sx, sy)= self.initSpeed
 
-        self.speed = (sx, sy)
+        self.speed = [sx, sy]
         self.x += sx 
         self.y += sy
+        self.rect.topleft = (self.x, self.y)
+
+class Bat:
+    def __init__(self, x, y, imgPath):
+        self.x = 0
+        self.y = y
+        self.img = pygame.image.load(imgPath)
+        self.rect = self.img.get_rect()
+        self.rect.y = y
+
+    def draw(self, surface): 
+        surface.blit(self.img, (self.x, self. y))
+
+    def update(self, x, y):
+        self.x, self.y = x, y
         self.rect.topleft = (self.x, self.y)

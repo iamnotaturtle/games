@@ -1,6 +1,6 @@
 import pygame, os, sys
 from pygame.locals import *
-from classes import Ball
+from classes import Ball, Bat
 
 def init():
     pygame.init()
@@ -12,14 +12,10 @@ def init():
     pygame.mixer.music.load('./resources/music.mp3')
 
     black = pygame.Color(0, 0, 0)
-
     playerY = 540
 
-    bat = pygame.image.load('./resources/udf/bat.png')
-    batRect = bat.get_rect()
-    batRect.y = playerY
-
-    ball = Ball(24, 200, (6, 6), './resources/udf/ball.png')
+    bat = Bat(0, playerY, './resources/udf/bat.png')
+    ball = Ball(24, 200, [6, 6], './resources/udf/ball.png')
 
     brick = pygame.image.load('./resources/udf/brick.png')
     bricks = []
@@ -38,7 +34,6 @@ def init():
         black,
         playerY,
         bat,
-        batRect,
         ball,
         brick,
         bricks,
@@ -50,34 +45,24 @@ def init():
     black,
     playerY,
     bat,
-    batRect,
     ball,
     brick,
     bricks,
 ) = init()
 
-# pygame.mixer.music.play(-1)
+pygame.mixer.music.play(-1)
 
 while True:    
-    ball.update(fpsClock, batRect, playerY)
-
     brickHitIndex = ball.hasHitBrick(bricks)
     if brickHitIndex >= 0:
         hb = bricks[brickHitIndex]
-
         mX = ball.x + 4
         mY = ball.y + 4
         if mX > hb.x + hb.width or mX < hb.x:
             ball.speed[0] *= -1
         else:
             ball.speed[1] *= -1
-
         del bricks[brickHitIndex]
-
-    mainSurface.fill(black)
-    mainSurface.blit(bat, batRect)
-    for b in bricks:
-        mainSurface.blit(brick, b)
 
     for event in pygame.event.get():
         if event.type == QUIT: 
@@ -88,11 +73,17 @@ while True:
         elif event.type == MOUSEMOTION:
             mouseX, mouseY = event.pos
             if mouseX < 800 - 55:
-                batRect.topleft = (mouseX, playerY)
+                bat.update(mouseX, playerY)
             else:
-                batRect.topleft = (800 - 55, playerY)
-    
+                bat.update(800 - 55, playerY)
+
+    ball.update(bat.rect, playerY)
+
+    mainSurface.fill(black)
+    for b in bricks:
+        mainSurface.blit(brick, b)
     ball.draw(mainSurface)
+    bat.draw(mainSurface)
 
 
     pygame.display.update()
