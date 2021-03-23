@@ -65,7 +65,8 @@ while True:
         del bricks[brickHitIndex]
 
     for event in pygame.event.get():
-        if event.type == QUIT: 
+        if event.type == QUIT:
+            pygame.mixer.quit()
             pygame.quit()
             sys.exit()
         elif event.type == MOUSEBUTTONUP and not ball.served:
