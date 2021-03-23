@@ -18,7 +18,6 @@ class Position:
 
 
 class GameData:
-
     def __init__(self):
         self.lives = 3
         self.isDead = False
@@ -39,7 +38,6 @@ class GameData:
         self.blocks.append(Position(19, 15))
         self.direction = 0  # 0 = right, 1 = left, 2 = up, 3 = down
 
-
 def loseLife(gamedata):
 	gamedata.berrycount = 0
 	gamedata.lives -= 1
@@ -47,7 +45,6 @@ def loseLife(gamedata):
 	gamedata.blocks[:] = []
 	gamedata.blocks.append(Position(20, 15))
 	gamedata.blocks.append(Position(19, 15))
-
 
 def positionBerry(gamedata):
 	bx = random.randint(1, 38)
@@ -66,13 +63,11 @@ def positionBerry(gamedata):
 
 	gamedata.berry = Position(bx, by)
 
-
 def loadMapFile(fileName):
 	f = open(fileName, 'r')
 	content = f.readlines()
 	f.close()
 	return content
-
 
 def headHitBody(gamedata):
 	head = gamedata.blocks[0]
@@ -83,7 +78,6 @@ def headHitBody(gamedata):
 				return True
 
 	return False
-
 
 def headHitWall(map, gamedata):
 	row = 0
@@ -101,7 +95,6 @@ def headHitWall(map, gamedata):
 
 	return False
 
-
 def drawData(surface, gamedata):
 	# string, anti-alias?, colour
 	text = font.render("Lives = %d, Level = %d" %
@@ -110,7 +103,6 @@ def drawData(surface, gamedata):
 	textpos = text.get_rect(centerx=surface.get_width()/2, top=32)
 	surface.blit(font.render(
 	    f"Lives = {gamedata.lives}, Level = {gamedata.level}, Berries = {gamedata.berrycount}", 0, (255, 255, 255)), textpos)
-
 
 def drawGameOver(surface, gamedata):
 	# string, anti-alias?, colour
@@ -123,7 +115,6 @@ def drawGameOver(surface, gamedata):
 	    centerx=surface.get_width()/2, top=surface.get_height()/2)
 	surface.blit(text1, textpos1)
 	surface.blit(text2, textpos2)
-
 
 def drawWalls(surface, img, map):
 	row = 0
@@ -138,7 +129,6 @@ def drawWalls(surface, img, map):
 			col += 1
 		row += 1
 
-
 def drawSnake(surface, img, gamedata):
 	first = True
 
@@ -151,7 +141,6 @@ def drawSnake(surface, img, gamedata):
 			src = (8 * 16, 0, 16, 16)
 
 		surface.blit(img, dest, src)
-
 
 def updateGame(gamedata, gameTime):
 	gamedata.tick -= gameTime
@@ -222,8 +211,7 @@ def loadImages():
 	snake = pygame.image.load('./resources/projects/Snake/snake.png')
 	
 	return {'wall':wall, 'berry':raspberry, 'snake':snake}
-	
-	
+
 images = loadImages()
 
 images['berry'].set_colorkey((255, 0, 255))
